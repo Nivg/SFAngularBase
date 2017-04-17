@@ -2,6 +2,8 @@
  * Created by N.G on 15/04/2017.
  */
 import IComponentOptions = angular.IComponentOptions;
+import ILocationService = angular.ILocationService;
+import IScope = angular.IScope;
 import {AccountService} from "./account.service";
 import {AccountViewComponent} from "./accountView.component";
 import {AccountEditComponent} from "./accountEdit.component";
@@ -12,24 +14,22 @@ export class AccountComponent
     accountView: AccountViewComponent;
     accountEdit: AccountEditComponent;
 
-    constructor(private accountService: AccountService)
+    constructor(private $location: ILocationService, private accountService: AccountService, private $scope:IScope)
     {
         this.loadAccount();
     }
 
     loadAccount()
     {
-        this.accountService
-            .getAccount()
+        this.$scope.myPromise = this.getAccount(this.$location.search())
             .then(account => {
-                //debugger;
                 this.account = account
             });
     }
 
-    getAccount()
+    getAccount(arg)
     {
-        return this.account;
+        return this.accountService.getAccount(arg);
     }
 
     addAccountView(accountView: AccountViewComponent)
@@ -46,21 +46,33 @@ export class AccountComponent
     {
         this.accountEdit.isActive = true;
         this.accountView.isActive = false;
+        this.loadAccount();
     }
 
     cancelEditAccount()
     {
         this.accountEdit.isActive = false;
         this.accountView.isActive = true;
+        this.loadAccount();
     }
 
     saveAccount(isValid: boolean)
     {
-        console.log('isValidForm::' + isValid);
         if(isValid)
         {
-            this.accountEdit.isActive = false;
-            this.accountView.isActive = true;
+            this.$scope.myPromise = this.accountService.saveAccount(this.account).then(result => {
+                    if(result.Status === 'Success')
+                    {
+                        this.accountEdit.isActive = false;
+                        this.accountView.isActive = true;
+                        this.loadAccount();
+                    }
+                    else
+                    {
+                        //show error message...
+                        console.log('ERROR::' + result.Message);
+                    }
+                });
         }
     }
 }
@@ -68,5 +80,5 @@ export class AccountComponent
 export const accountComponent: IComponentOptions =
     {
         controller: AccountComponent,
-        templateUrl: 'app/account/account.html'
+        templateUrl: function() {return location.hostname === "localhost" ? 'app/account/account.html' : 'account.html';}
     };

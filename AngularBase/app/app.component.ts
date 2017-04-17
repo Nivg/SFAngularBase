@@ -11,5 +11,5 @@ class AppComponent
 export const appComponent: IComponentOptions =
     {
         controller: AppComponent,
-        templateUrl: 'app/app.html'
+        templateUrl: function() {return location.hostname === "localhost" ? 'app/app.html' : 'app.html';}
     };

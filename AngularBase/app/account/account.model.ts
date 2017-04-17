@@ -3,10 +3,13 @@
  */
 export class AccountModel
 {
-    constructor(public Name: string,
+    constructor(public Id: string,
+                public Name: string,
                 public Phone: string,
                 public Type: string,
-                public Website: string)
+                public Website: string,
+                public Status?: string,
+                public Message?: string)
     {
 
     }

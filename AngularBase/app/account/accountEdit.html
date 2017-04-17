@@ -1,6 +1,6 @@
 <div ng-show="$ctrl.isActive">
     <div class="container">
-        <form name="accountForm" novalidate ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
+        <form name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
             <div class="row">
                 <h2>Simple 2-column Form Edit</h2>
             </div>
@@ -13,20 +13,20 @@
                                 <div class="form-group row" ng-class="{ 'has-error' : accountForm.accountName.$invalid && !accountForm.accountName.$pristine }">
                                     <label class="col-xs-5 control-label">Name: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" name="accountName" class="form-control" ng-model="$ctrl.account.Name" ng-required="true"/>
+                                        <input type="text" name="accountName" class="form-control" ng-model="$ctrl.accountCtrl.account.Name" ng-required="true"/>
                                         <p ng-show="accountForm.accountName.$invalid && !accountForm.accountName.$pristine" class="help-block">Account Name is required.</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xs-5 control-label">Phone Number: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" value="{{$ctrl.account.Phone}}"/>
+                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Phone"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xs-5 control-label">Type: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" value="{{$ctrl.account.Type}}"/>
+                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Type"/>
                                     </div>
                                 </div>
                             </div>

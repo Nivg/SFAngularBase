@@ -8,12 +8,10 @@ export class AccountViewComponent
 {
     isActive: boolean;
     accountCtrl: AccountComponent;
-    account: any;
 
     $onInit()
     {
         this.accountCtrl.addAccountView(this);
-        this.account = this.accountCtrl.getAccount();
         this.isActive = true;
     }
 }
@@ -25,5 +23,5 @@ export const accountViewComponent: IComponentOptions =
             isActive: '<'
         },
         require: { accountCtrl: '^?account'},
-        templateUrl: 'app/account/accountView.html'
+        templateUrl: function() {return location.hostname === "localhost" ? 'app/account/accountView.html' : 'accountView.html';}
     };

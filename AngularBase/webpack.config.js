@@ -2,7 +2,7 @@ var webpack = require('webpack');
 module.exports = {
     entry: './app/main.ts',
     output: {
-        path: './dist',
+        path: 'D:\\Shared\\Dropbox\\Dev\\Programming\\IdeaForce\\SFAngularBase\\AngularBase\\dist',
         filename: 'bundle.js'
     },
     resolve: {
