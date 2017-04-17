@@ -1,0 +1,5 @@
+<apex:component id="AccountApp">
+    <div>
+        <account></account>
+    </div>
+</apex:component>

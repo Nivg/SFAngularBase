@@ -1,0 +1,14 @@
+<apex:component id="AngularTemplates">
+    <script type="text/ng-template" id="app.html">
+        <c:AccountApp/>
+    </script>
+    <script type="text/ng-template" id="account.html">
+        <c:AccountLayout/>
+    </script>
+    <script type="text/ng-template" id="accountView.html">
+        <c:AccountView/>
+    </script>
+    <script type="text/ng-template" id="accountEdit.html">
+        <c:AccountEdit/>
+    </script>
+</apex:component>

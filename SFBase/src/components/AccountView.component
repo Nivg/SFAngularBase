@@ -1,0 +1,49 @@
+<apex:component id="AccountView">
+    <div ng-show="$ctrl.isActive">
+        <div class="container">
+            <form>
+                <div class="row">
+                    <h2>Simple 2-column Form View</h2>
+                </div>
+                <div class="row">
+                    <fieldset class="for-panel">
+                        <legend>Account Info</legend>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-horizontal">
+                                    <label class="col-xs-5 control-label">Id: </label>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Id}}</p>
+                                    <label class="col-xs-5 control-label">Name: </label>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Name}}</p>
+                                    <label class="col-xs-5 control-label">Phone Number: </label>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Phone}}</p>
+                                    <label class="col-xs-5 control-label">Type: </label>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Type}}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-horizontal">
+                                    <label class="col-xs-4 control-label">Address: </label>
+                                    <p class="form-control-static">248, Markway Ave, Moorpark Dr</p>
+                                    <label class="col-xs-4 control-label">City:</label>
+                                    <p class="form-control-static">Simmi Valley</p>
+                                    <label class="col-xs-4 control-label">State:</label>
+                                    <p class="form-control-static">CA</p>
+                                    <label class="col-xs-4 control-label">Country:</label>
+                                    <p class="form-control-static">USA</p>
+                                    <label class="col-xs-4 control-label">Zip Code:</label>
+                                    <p class="form-control-static">92432</p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <div class="form-group row pull-right" role="group">
+                        <button type="button" class="btn btn-primary" ng-click="$ctrl.accountCtrl.editAccount()">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</apex:component>

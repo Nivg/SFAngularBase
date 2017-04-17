@@ -1,0 +1,61 @@
+<apex:component id="AccountEdit">
+    <div ng-show="$ctrl.isActive">
+        <div class="container">
+            <form name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
+                <div class="row">
+                    <h2>Simple 2-column Form Edit</h2>
+                </div>
+                <div class="row">
+                    <fieldset class="for-panel">
+                        <legend>Account Info</legend>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-horizontal">
+                                    <div class="form-group row" ng-class="{ 'has-error' : accountForm.accountName.$invalid && !accountForm.accountName.$pristine }">
+                                        <label class="col-xs-5 control-label">Name: </label>
+                                        <div class="col-xs-5">
+                                            <input type="text" name="accountName" class="form-control" ng-model="$ctrl.accountCtrl.account.Name" ng-required="true"/>
+                                            <p ng-show="accountForm.accountName.$invalid && !accountForm.accountName.$pristine" class="help-block">Account Name is required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xs-5 control-label">Phone Number: </label>
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Phone"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xs-5 control-label">Type: </label>
+                                        <div class="col-xs-5">
+                                            <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Type"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-horizontal">
+                                    <label class="col-xs-4 control-label">Address: </label>
+                                    <p class="form-control-static">248, Markway Ave, Moorpark Dr</p>
+                                    <label class="col-xs-4 control-label">City:</label>
+                                    <p class="form-control-static">Simmi Valley</p>
+                                    <label class="col-xs-4 control-label">State:</label>
+                                    <p class="form-control-static">CA</p>
+                                    <label class="col-xs-4 control-label">Country:</label>
+                                    <p class="form-control-static">USA</p>
+                                    <label class="col-xs-4 control-label">Zip Code:</label>
+                                    <p class="form-control-static">92432</p>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="row">
+                    <div class="form-group row pull-right" role="group">
+                        <button type="submit" class="btn btn-primary" ng-disabled="accountForm.$invalid">Save</button>
+                        <button type="button" class="btn btn-default" ng-click="$ctrl.accountCtrl.cancelEditAccount()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</apex:component>

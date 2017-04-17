@@ -1,0 +1,28 @@
+<apex:page id="CustomAccountLayout"
+           controller="CustomAccountLayout_CTRL"
+           docType="html-5.0"
+           applyBodyTag="false"
+           applyHtmlTag="false"
+           standardStylesheets="false"
+           sideBar="false"
+           showHeader="false">
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>SalesforceDemo</title>
+        <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/node_modules/bootstrap/dist/css/bootstrap.min.css')}" type='text/css'/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/app/account/account.css')}" type='text/css'/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/node_modules/@cgross/angular-busy/dist/angular-busy.min.css')}" type='text/css'/>
+    </head>
+    <body>
+        <c:AngularTemplates/>
+        <my-app>
+        </my-app>
+        <script type='text/javascript' src="{!URLFOR($Resource.AngularBase, '/node_modules/jquery/dist/jquery.min.js')}"/>
+        <script type='text/javascript' src="{!URLFOR($Resource.AngularBase, '/node_modules/angular/angular.min.js')}"/>
+        <script type='text/javascript' src="{!URLFOR($Resource.AngularBase, '/node_modules/bootstrap/dist/js/bootstrap.min.js')}"/>
+        <script type='text/javascript' src="{!URLFOR($Resource.AngularBase, '/node_modules/@cgross/angular-busy/dist/angular-busy.min.js')}"/>
+        <script type='text/javascript' src="{!URLFOR($Resource.AngularBase, '/dist/bundle.js')}"/>
+    </body>
+</html>
+</apex:page>
