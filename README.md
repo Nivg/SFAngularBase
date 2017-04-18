@@ -26,3 +26,7 @@ Run Webpack in order to bundle the files using the following command:
 ```
 npm run watch
 ```
+
+# TODO
+> - Implement mock SF responses
+> - Handle errors from server
