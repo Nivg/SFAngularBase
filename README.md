@@ -1,5 +1,5 @@
 # SFAngularBase
-Base project for SF with Angular (1.x with Angular 2 style).
+Base project for SF with Angular 1.x (with Angular 2 style).
 
 # Demo
 [Link to Demo...](www.linkToDemo.com)
