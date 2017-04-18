@@ -67,3 +67,9 @@ typings/
 *.iml
 out
 gen
+
+# TS compiled files
+AngularBase/app/**/*.js
+AngularBase/app/**/*.map
+IlluminatedCloud/
+node_modules/
