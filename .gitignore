@@ -72,11 +72,12 @@ gen
 AngularBase/app/**/*.js
 AngularBase/app/**/*.map
 IlluminatedCloud/
-node_modules/
 
 !/AngularBase/node_modules/bootstrap/dist/
 !/AngularBase/node_modules/@cgross/angular-busy/dist/
 !/AngularBase/node_modules/core-js/client/
 !/AngularBase/node_modules/systemjs/dist/
 !/AngularBase/node_modules/jquery/dist/
-!/AngularBase/node_modules/angular/
+!/AngularBase/node_modules/angular/angular.js
+!/AngularBase/node_modules/angular/angular.min.js
+!/AngularBase/node_modules/angular/angular.min.js.map
