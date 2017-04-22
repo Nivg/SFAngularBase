@@ -1,7 +1,7 @@
 <apex:component id="AccountView">
     <div ng-show="$ctrl.isActive">
         <div class="container">
-            <form>
+            <form ng-if="$ctrl.accountCtrl.viewAccountModel">
                 <div class="row">
                     <h2>Simple 2-column Form View</h2>
                 </div>
@@ -12,13 +12,13 @@
                             <div class="col-sm-6">
                                 <div class="form-horizontal">
                                     <label class="col-xs-5 control-label">Id: </label>
-                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Id}}</p>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.viewAccountModel.Id}}</p>
                                     <label class="col-xs-5 control-label">Name: </label>
-                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Name}}</p>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.viewAccountModel.Name}}</p>
                                     <label class="col-xs-5 control-label">Phone Number: </label>
-                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Phone}}</p>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.viewAccountModel.Phone}}</p>
                                     <label class="col-xs-5 control-label">Type: </label>
-                                    <p class="form-control-static">{{$ctrl.accountCtrl.account.Type}}</p>
+                                    <p class="form-control-static">{{$ctrl.accountCtrl.viewAccountModel.Type}}</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
