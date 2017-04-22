@@ -2,6 +2,7 @@
  * Created by N.G on 15/04/2017.
  */
 import IComponentOptions = angular.IComponentOptions;
+import {SFUtilsSelectorService} from "./sfutils/sfUtilsSelector.service";
 
 class AppComponent
 {
@@ -11,5 +12,5 @@ class AppComponent
 export const appComponent: IComponentOptions =
     {
         controller: AppComponent,
-        templateUrl: function() {return location.hostname === "localhost" ? 'app/app.html' : 'app.html';}
+        templateUrl: SFUtilsSelectorService.buildTemplateURL('app/app.html')
     };

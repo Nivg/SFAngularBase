@@ -5,15 +5,21 @@ import IAngularStatic = angular.IAngularStatic;
 import {appComponent} from "./app.component";
 import {AccountModule} from "./account/account.module";
 import {SFUtilsService} from "./sfutils/sfUtils.service";
+import {SFUtilsSelectorService} from "./sfutils/sfUtilsSelector.service";
+import {SFUtilsServer} from "./sfutils/sfUtilsServer.server";
+import {SFUtilsMock} from "./sfutils/sfUtilsMock.service";
 declare const angular: IAngularStatic;
 
 export const appModule = angular
     .module('app.module', [
-        'cgBusy',
+        'cgBusy', //https://github.com/cgross/angular-busy/blob/master/README.md
         AccountModule.name
     ])
     .component('myApp', appComponent)
     .service('sfUtilsService', SFUtilsService)
+    .service('sfUtilsServiceSelector', SFUtilsSelectorService)
+    .service('sfServer', SFUtilsServer)
+    .service('sfMock', SFUtilsMock)
     .config(function ($locationProvider) {
         $locationProvider.html5Mode({
             enabled: true, //https://github.com/angular/angular.js/issues/7239
