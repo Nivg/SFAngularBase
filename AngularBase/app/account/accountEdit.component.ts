@@ -3,6 +3,7 @@
  */
 import IComponentOptions = angular.IComponentOptions;
 import {AccountComponent} from "./account.component";
+import {SFUtilsSelectorService} from "../sfutils/sfUtilsSelector.service";
 
 export class AccountEditComponent
 {
@@ -23,5 +24,5 @@ export const accountEditComponent: IComponentOptions =
             isActive: '<'
         },
         require: { accountCtrl: '^?account'},
-        templateUrl: function() {return location.hostname === "localhost" ? 'app/account/accountEdit.html' : 'accountEdit.html';}
+        templateUrl: SFUtilsSelectorService.buildTemplateURL('app/account/accountEdit.html')
     };

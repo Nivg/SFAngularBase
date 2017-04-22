@@ -1,5 +1,8 @@
 <div>
-    <div cg-busy="myPromise"></div>
-    <account-view></account-view>
-    <account-edit></account-edit>
+    <div cg-busy="viewPromise">
+        <account-view></account-view>
+    </div>
+    <div cg-busy="editPromise">
+        <account-edit></account-edit>
+    </div>
 </div>

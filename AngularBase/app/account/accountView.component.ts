@@ -3,6 +3,7 @@
  */
 import IComponentOptions = angular.IComponentOptions;
 import {AccountComponent} from "./account.component";
+import {SFUtilsSelectorService} from "../sfutils/sfUtilsSelector.service";
 
 export class AccountViewComponent
 {
@@ -23,5 +24,5 @@ export const accountViewComponent: IComponentOptions =
             isActive: '<'
         },
         require: { accountCtrl: '^?account'},
-        templateUrl: function() {return location.hostname === "localhost" ? 'app/account/accountView.html' : 'accountView.html';}
+        templateUrl: SFUtilsSelectorService.buildTemplateURL('app/account/accountView.html')
     };

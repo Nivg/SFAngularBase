@@ -1,6 +1,7 @@
+<div cg-busy="editPromise"></div>
 <div ng-show="$ctrl.isActive">
     <div class="container">
-        <form name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
+        <form ng-if="$ctrl.accountCtrl.editAccountModel" name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
             <div class="row">
                 <h2>Simple 2-column Form Edit</h2>
             </div>
@@ -13,20 +14,20 @@
                                 <div class="form-group row" ng-class="{ 'has-error' : accountForm.accountName.$invalid && !accountForm.accountName.$pristine }">
                                     <label class="col-xs-5 control-label">Name: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" name="accountName" class="form-control" ng-model="$ctrl.accountCtrl.account.Name" ng-required="true"/>
+                                        <input type="text" name="accountName" class="form-control" ng-model="$ctrl.accountCtrl.editAccountModel.Name" ng-required="true"/>
                                         <p ng-show="accountForm.accountName.$invalid && !accountForm.accountName.$pristine" class="help-block">Account Name is required.</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xs-5 control-label">Phone Number: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Phone"/>
+                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.editAccountModel.Phone"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-xs-5 control-label">Type: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.account.Type"/>
+                                        <input type="text" class="form-control" ng-model="$ctrl.accountCtrl.editAccountModel.Type"/>
                                     </div>
                                 </div>
                             </div>

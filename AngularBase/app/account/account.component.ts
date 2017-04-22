@@ -7,23 +7,35 @@ import IScope = angular.IScope;
 import {AccountService} from "./account.service";
 import {AccountViewComponent} from "./accountView.component";
 import {AccountEditComponent} from "./accountEdit.component";
+import {SFUtilsSelectorService} from "../sfutils/sfUtilsSelector.service";
 
 export class AccountComponent
 {
-    account: any;
+    viewAccountModel: any;
+    editAccountModel: any;
     accountView: AccountViewComponent;
     accountEdit: AccountEditComponent;
 
     constructor(private $location: ILocationService, private accountService: AccountService, private $scope:IScope)
     {
-        this.loadAccount();
+        this.loadViewAccount();
     }
 
-    loadAccount()
+    loadViewAccount()
     {
-        this.$scope.myPromise = this.getAccount(this.$location.search())
+        this.$scope.viewPromise = this.getAccount(this.$location.search())
             .then(account => {
-                this.account = account
+                this.viewAccountModel = account
+                this.editAccountModel = null;
+            });
+    }
+
+    loadEditAccount()
+    {
+        this.$scope.editPromise = this.getAccount(this.$location.search())
+            .then(account => {
+                this.editAccountModel = account
+                this.viewAccountModel = null;
             });
     }
 
@@ -46,26 +58,26 @@ export class AccountComponent
     {
         this.accountEdit.isActive = true;
         this.accountView.isActive = false;
-        this.loadAccount();
+        this.loadEditAccount();
     }
 
     cancelEditAccount()
     {
         this.accountEdit.isActive = false;
         this.accountView.isActive = true;
-        this.loadAccount();
+        this.loadViewAccount();
     }
 
     saveAccount(isValid: boolean)
     {
         if(isValid)
         {
-            this.$scope.myPromise = this.accountService.saveAccount(this.account).then(result => {
+            this.$scope.editPromise = this.accountService.saveAccount(this.editAccountModel).then(result => {
                     if(result.Status === 'Success')
                     {
                         this.accountEdit.isActive = false;
                         this.accountView.isActive = true;
-                        this.loadAccount();
+                        this.loadViewAccount();
                     }
                     else
                     {
@@ -80,5 +92,5 @@ export class AccountComponent
 export const accountComponent: IComponentOptions =
     {
         controller: AccountComponent,
-        templateUrl: function() {return location.hostname === "localhost" ? 'app/account/account.html' : 'account.html';}
+        templateUrl: SFUtilsSelectorService.buildTemplateURL('app/account/account.html')
     };
