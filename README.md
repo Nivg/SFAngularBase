@@ -28,7 +28,4 @@ npm run watch
 ```
 
 # TODO
-> - Implement mock SF responses: Create another service for sf utils just comment the one you want to use, only the sfRemote function is what the developer sees
-> - Use $q directly (we don't need anything else)
-> - Create service with type script function for the template local vs server
 > - Handle errors from server
