@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,16 +73,76 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var app_component_1 = __webpack_require__(7);
-var account_module_1 = __webpack_require__(3);
-var sfUtils_service_1 = __webpack_require__(9);
+var SFUtilsSelectorService = (function () {
+    function SFUtilsSelectorService(sfServer, sfMock) {
+        this.sfServer = sfServer;
+        this.sfMock = sfMock;
+    }
+    SFUtilsSelectorService.prototype.sfRemote = function (name, arg) {
+        return SFUtilsSelectorService.isLocal() ? this.sfMock.sfRemote(name, arg) : this.sfServer.sfRemote(name, arg);
+    };
+    SFUtilsSelectorService.isLocal = function () {
+        return location.hostname === "localhost";
+    };
+    SFUtilsSelectorService.buildTemplateURL = function (url) {
+        var relevantURL = url;
+        if (!SFUtilsSelectorService.isLocal() && url) {
+            relevantURL = url.split(/[// ]+/).pop();
+        }
+        return relevantURL;
+    };
+    return SFUtilsSelectorService;
+}());
+SFUtilsSelectorService.FUNCTIONS_NAME_MAP = {
+    'getAccount': 'CustomAccountLayout_CTRL.getAccount',
+    'saveAccount': 'CustomAccountLayout_CTRL.saveAccount'
+};
+exports.SFUtilsSelectorService = SFUtilsSelectorService;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Created by N.G on 16/04/2017.
+ */
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var SFUtilsService = (function () {
+    function SFUtilsService() {
+    }
+    return SFUtilsService;
+}());
+SFUtilsService.FUNCTIONS_NAME_MAP = {
+    'getAccount': 'CustomAccountLayout_CTRL.getAccount',
+    'saveAccount': 'CustomAccountLayout_CTRL.saveAccount'
+};
+exports.SFUtilsService = SFUtilsService;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var app_component_1 = __webpack_require__(8);
+var account_module_1 = __webpack_require__(4);
+var sfUtilsSelector_service_1 = __webpack_require__(0);
+var sfUtilsServer_server_1 = __webpack_require__(11);
+var sfUtilsMock_service_1 = __webpack_require__(10);
 exports.appModule = angular
     .module('app.module', [
     'cgBusy',
     account_module_1.AccountModule.name
 ])
     .component('myApp', app_component_1.appComponent)
-    .service('sfUtilsService', sfUtils_service_1.SFUtilsService)
+    .service('sfUtilsServiceSelector', sfUtilsSelector_service_1.SFUtilsSelectorService)
+    .service('sfServer', sfUtilsServer_server_1.SFUtilsServer)
+    .service('sfMock', sfUtilsMock_service_1.SFUtilsMock)
     .config(function ($locationProvider) {
     $locationProvider.html5Mode({
         enabled: true,
@@ -93,24 +153,34 @@ exports.appModule = angular
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtilsSelector_service_1 = __webpack_require__(0);
 var AccountComponent = (function () {
     function AccountComponent($location, accountService, $scope) {
         this.$location = $location;
         this.accountService = accountService;
         this.$scope = $scope;
-        this.loadAccount();
+        this.loadViewAccount();
     }
-    AccountComponent.prototype.loadAccount = function () {
+    AccountComponent.prototype.loadViewAccount = function () {
         var _this = this;
-        this.$scope.myPromise = this.getAccount(this.$location.search())
+        this.$scope.viewPromise = this.getAccount(this.$location.search())
             .then(function (account) {
-            _this.account = account;
+            _this.viewAccountModel = account;
+            _this.editAccountModel = null;
+        });
+    };
+    AccountComponent.prototype.loadEditAccount = function () {
+        var _this = this;
+        this.$scope.editPromise = this.getAccount(this.$location.search())
+            .then(function (account) {
+            _this.editAccountModel = account;
+            _this.viewAccountModel = null;
         });
     };
     AccountComponent.prototype.getAccount = function (arg) {
@@ -125,21 +195,21 @@ var AccountComponent = (function () {
     AccountComponent.prototype.editAccount = function () {
         this.accountEdit.isActive = true;
         this.accountView.isActive = false;
-        this.loadAccount();
+        this.loadEditAccount();
     };
     AccountComponent.prototype.cancelEditAccount = function () {
         this.accountEdit.isActive = false;
         this.accountView.isActive = true;
-        this.loadAccount();
+        this.loadViewAccount();
     };
     AccountComponent.prototype.saveAccount = function (isValid) {
         var _this = this;
         if (isValid) {
-            this.$scope.myPromise = this.accountService.saveAccount(this.account).then(function (result) {
+            this.$scope.editPromise = this.accountService.saveAccount(this.editAccountModel).then(function (result) {
                 if (result.Status === 'Success') {
                     _this.accountEdit.isActive = false;
                     _this.accountView.isActive = true;
-                    _this.loadAccount();
+                    _this.loadViewAccount();
                 }
                 else {
                     //show error message...
@@ -153,52 +223,8 @@ var AccountComponent = (function () {
 exports.AccountComponent = AccountComponent;
 exports.accountComponent = {
     controller: AccountComponent,
-    templateUrl: function () { return location.hostname === "localhost" ? 'app/account/account.html' : 'account.html'; }
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/account/account.html')
 };
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Created by N.G on 15/04/2017.
- */
-var AccountModel = (function () {
-    function AccountModel(Id, Name, Phone, Type, Website, Status, Message) {
-        this.Id = Id;
-        this.Name = Name;
-        this.Phone = Phone;
-        this.Type = Type;
-        this.Website = Website;
-        this.Status = Status;
-        this.Message = Message;
-    }
-    return AccountModel;
-}());
-exports.AccountModel = AccountModel;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var account_component_1 = __webpack_require__(1);
-var account_service_1 = __webpack_require__(4);
-var accountView_component_1 = __webpack_require__(6);
-var accountEdit_component_1 = __webpack_require__(5);
-exports.AccountModule = angular
-    .module('AccountModule', [])
-    .component('account', account_component_1.accountComponent)
-    .component('accountView', accountView_component_1.accountViewComponent)
-    .component('accountEdit', accountEdit_component_1.accountEditComponent)
-    .service('accountService', account_service_1.AccountService);
 
 
 /***/ }),
@@ -208,59 +234,16 @@ exports.AccountModule = angular
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var account_model_1 = __webpack_require__(2);
-var AccountService = (function () {
-    function AccountService($q, sfUtilsService) {
-        this.$q = $q;
-        this.sfUtilsService = sfUtilsService;
-    }
-    AccountService.prototype.getAccount = function (arg) {
-        var p;
-        //For local testing::
-        if (location.hostname === "localhost") {
-            p = new Promise(function (resolve, reject) {
-                setTimeout(function () {
-                    resolve(new account_model_1.AccountModel(arg.Id, 'Acc1', '054-9914567', 'Other', 'Acc1.com'));
-                }, 1000);
-            });
-        }
-        else {
-            p = this.sfUtilsService.sfRemote('CustomAccountLayout_CTRL.getAccount', arg); //For server.
-        }
-        return this.$q.when(p).then(// Log the fulfillment value
-        function (val) {
-            return val;
-        })
-            .catch(
-        // Log the rejection reason
-        function (reason) {
-            console.log('Handle rejected promise (' + reason + ') here.');
-        });
-    };
-    AccountService.prototype.saveAccount = function (arg) {
-        var p;
-        //For local testing::
-        if (location.hostname === "localhost") {
-            p = new Promise(function (resolve, reject) {
-                resolve({ 'Status': 'Success', 'Message': '' });
-            });
-        }
-        else {
-            p = this.sfUtilsService.sfRemote('CustomAccountLayout_CTRL.saveAccount', arg); //For server.
-        }
-        return this.$q.when(p).then(// Log the fulfillment value
-        function (val) {
-            return val;
-        })
-            .catch(
-        // Log the rejection reason
-        function (reason) {
-            console.log('Handle rejected promise (' + reason + ') here.');
-        });
-    };
-    return AccountService;
-}());
-exports.AccountService = AccountService;
+var account_component_1 = __webpack_require__(3);
+var account_service_1 = __webpack_require__(5);
+var accountView_component_1 = __webpack_require__(7);
+var accountEdit_component_1 = __webpack_require__(6);
+exports.AccountModule = angular
+    .module('AccountModule', [])
+    .component('account', account_component_1.accountComponent)
+    .component('accountView', accountView_component_1.accountViewComponent)
+    .component('accountEdit', accountEdit_component_1.accountEditComponent)
+    .service('accountService', account_service_1.AccountService);
 
 
 /***/ }),
@@ -270,6 +253,30 @@ exports.AccountService = AccountService;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtils_service_1 = __webpack_require__(1);
+var AccountService = (function () {
+    function AccountService(sfUtilsServiceSelector) {
+        this.sfUtilsServiceSelector = sfUtilsServiceSelector;
+    }
+    AccountService.prototype.getAccount = function (arg) {
+        return this.sfUtilsServiceSelector.sfRemote(sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.getAccount, arg);
+    };
+    AccountService.prototype.saveAccount = function (arg) {
+        return this.sfUtilsServiceSelector.sfRemote(sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.saveAccount, arg);
+    };
+    return AccountService;
+}());
+exports.AccountService = AccountService;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtilsSelector_service_1 = __webpack_require__(0);
 var AccountEditComponent = (function () {
     function AccountEditComponent() {
     }
@@ -286,17 +293,18 @@ exports.accountEditComponent = {
         isActive: '<'
     },
     require: { accountCtrl: '^?account' },
-    templateUrl: function () { return location.hostname === "localhost" ? 'app/account/accountEdit.html' : 'accountEdit.html'; }
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/account/accountEdit.html')
 };
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtilsSelector_service_1 = __webpack_require__(0);
 var AccountViewComponent = (function () {
     function AccountViewComponent() {
     }
@@ -313,26 +321,7 @@ exports.accountViewComponent = {
         isActive: '<'
     },
     require: { accountCtrl: '^?account' },
-    templateUrl: function () { return location.hostname === "localhost" ? 'app/account/accountView.html' : 'accountView.html'; }
-};
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var AppComponent = (function () {
-    function AppComponent() {
-        this.cmpName = 'AppComponent';
-    }
-    return AppComponent;
-}());
-exports.appComponent = {
-    controller: AppComponent,
-    templateUrl: function () { return location.hostname === "localhost" ? 'app/app.html' : 'app.html'; }
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/account/accountView.html')
 };
 
 
@@ -343,10 +332,17 @@ exports.appComponent = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var app_module_1 = __webpack_require__(0);
-angular.bootstrap(document, [
-    app_module_1.appModule.name
-]);
+var sfUtilsSelector_service_1 = __webpack_require__(0);
+var AppComponent = (function () {
+    function AppComponent() {
+        this.cmpName = 'AppComponent';
+    }
+    return AppComponent;
+}());
+exports.appComponent = {
+    controller: AppComponent,
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/app.html')
+};
 
 
 /***/ }),
@@ -356,25 +352,115 @@ angular.bootstrap(document, [
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var SFUtilsService = (function () {
-    function SFUtilsService($q) {
-        this.$q = $q;
-    }
-    SFUtilsService.prototype.sfRemote = function (name, arg) {
-        var deffered = this.$q.defer();
-        Visualforce.remoting.Manager.invokeAction(name, arg, function (result, event) {
-            if (event.status) {
-                deffered.resolve(result);
-            }
-            else {
-                deffered.reject(event);
-            }
-        }, { buffer: true, escape: false });
-        return deffered.promise;
+var app_module_1 = __webpack_require__(2);
+angular.bootstrap(document, [
+    app_module_1.appModule.name
+]);
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    return SFUtilsService;
-}());
-exports.SFUtilsService = SFUtilsService;
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtils_service_1 = __webpack_require__(1);
+var SFUtilsMock = (function (_super) {
+    __extends(SFUtilsMock, _super);
+    function SFUtilsMock($timeout) {
+        var _this = _super.call(this) || this;
+        _this.$timeout = $timeout;
+        return _this;
+    }
+    SFUtilsMock.prototype.sfRemote = function (name, arg) {
+        var answer;
+        switch (name) {
+            case sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.getAccount:
+                {
+                    answer = this.$timeout(function () {
+                        return { Id: arg.Id, Name: 'Acc1', Phone: '054-9914567', Type: 'Other', Website: 'Acc1.com' };
+                    }, 2000);
+                    break;
+                }
+            case sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.saveAccount:
+                {
+                    answer = this.$timeout(function () {
+                        var saveAccountAns;
+                        if (arg) {
+                            saveAccountAns = { 'Status': 'Success', 'Message': '' };
+                        }
+                        else {
+                            saveAccountAns = { 'Status': 'Error', 'Message': 'Save Account Error' };
+                        }
+                        return saveAccountAns;
+                    }, 3000);
+                    break;
+                }
+            default:
+                {
+                    answer = this.$timeout(function () {
+                        return { 'Status': 'Error', 'Message': 'No function name provided.' };
+                    }, 100);
+                }
+        }
+        return answer;
+    };
+    return SFUtilsMock;
+}(sfUtils_service_1.SFUtilsService));
+exports.SFUtilsMock = SFUtilsMock;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtils_service_1 = __webpack_require__(1);
+var SFUtilsServer = (function (_super) {
+    __extends(SFUtilsServer, _super);
+    function SFUtilsServer($q) {
+        var _this = _super.call(this) || this;
+        _this.$q = $q;
+        return _this;
+    }
+    SFUtilsServer.prototype.sfRemote = function (name, arg) {
+        return this.$q(function (resolve, reject) {
+            Visualforce.remoting.Manager.invokeAction(name, arg, function (result, event) {
+                if (event.status) {
+                    resolve(result);
+                }
+                else {
+                    reject(event);
+                }
+            }, { buffer: true, escape: false });
+        });
+    };
+    return SFUtilsServer;
+}(sfUtils_service_1.SFUtilsService));
+exports.SFUtilsServer = SFUtilsServer;
 
 
 /***/ })
