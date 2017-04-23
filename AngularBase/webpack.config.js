@@ -2,8 +2,7 @@ var webpack = require('webpack');
 module.exports = {
     entry: './app/main.ts',
     output: {
-        path: 'D:\\Shared\\Dropbox\\Dev\\Programming\\IdeaForce\\SFAngularBase\\AngularBase\\dist',
-        filename: 'bundle.js'
+        filename: 'dist/bundle.js'
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
