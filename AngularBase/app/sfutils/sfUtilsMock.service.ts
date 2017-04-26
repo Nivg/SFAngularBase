@@ -32,14 +32,24 @@ export class SFUtilsMock extends SFUtilsService
                     let saveAccountAns;
                     if (arg)
                     {
-                        saveAccountAns = {'Status': 'Success', 'Message' : ''};
+                        saveAccountAns = {Status: 'Success', Message : ''};
                     }
                     else
                     {
-                        saveAccountAns = {'Status': 'Error', 'Message' : 'Save Account Error'};
+                        saveAccountAns = {Status: 'Error', Message : 'Save Account Error'};
                     }
                     return saveAccountAns;
                 }, 3000);
+                break;
+            }
+            case SFUtilsService.FUNCTIONS_NAME_MAP.getContacts :
+            {
+                answer = this.$timeout(function ()
+                {
+                    return {Contacts:[{Email: 'jrogers@burlington.com', Id: 'c123456788',  Name: 'Jack Rogers', Title: 'VP, Facilities'}
+                                     ,{Email: 'jrogers1@burlington.com', Id: 'c123456785',  Name: 'Jack1 Rogers1', Title: 'VP1, Facilities1'}],
+                            Id: 'a12345678', Status: 'Success'};
+                }, 4000);
                 break;
             }
             default:

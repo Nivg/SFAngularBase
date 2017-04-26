@@ -10,8 +10,8 @@ import {accountEditComponent} from "./accountEdit.component";
 
 declare const angular: IAngularStatic;
 
-export const AccountModule: IModule = angular
-    .module('AccountModule', [])
+export const accountModule: IModule = angular
+    .module('accountModule', [])
     .component('account', accountComponent)
     .component('accountView', accountViewComponent)
     .component('accountEdit', accountEditComponent)

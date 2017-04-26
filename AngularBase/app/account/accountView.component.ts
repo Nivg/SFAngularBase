@@ -2,6 +2,7 @@
  * Created by N.G on 15/04/2017.
  */
 import IComponentOptions = angular.IComponentOptions;
+import IScope = angular.IScope;
 import {AccountComponent} from "./account.component";
 import {SFUtilsSelectorService} from "../sfutils/sfUtilsSelector.service";
 

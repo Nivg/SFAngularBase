@@ -15,6 +15,7 @@ export class AccountComponent
     editAccountModel: any;
     accountView: AccountViewComponent;
     accountEdit: AccountEditComponent;
+    contacts: any;
 
     constructor(private $location: ILocationService, private accountService: AccountService, private $scope:IScope)
     {
@@ -23,19 +24,24 @@ export class AccountComponent
 
     loadViewAccount()
     {
-        this.$scope.viewPromise = this.getAccount(this.$location.search())
+        this.editAccountModel = null;
+        this.$scope.viewAccountPromise = this.getAccount(this.$location.search())
             .then(account => {
                 this.viewAccountModel = account
-                this.editAccountModel = null;
+            });
+
+        this.$scope.contactsPromise = this.getContacts(this.$location.search())
+            .then(account => {
+                this.contacts = account.Contacts;
             });
     }
 
     loadEditAccount()
     {
-        this.$scope.editPromise = this.getAccount(this.$location.search())
+        this.viewAccountModel = null;
+        this.$scope.editAccountPromise = this.getAccount(this.$location.search())
             .then(account => {
                 this.editAccountModel = account
-                this.viewAccountModel = null;
             });
     }
 
@@ -72,7 +78,7 @@ export class AccountComponent
     {
         if(isValid)
         {
-            this.$scope.editPromise = this.accountService.saveAccount(this.editAccountModel).then(result => {
+            this.$scope.editAccountPromise = this.accountService.saveAccount(this.editAccountModel).then(result => {
                     if(result.Status === 'Success')
                     {
                         this.accountEdit.isActive = false;
@@ -86,6 +92,11 @@ export class AccountComponent
                     }
                 });
         }
+    }
+
+    getContacts(arg)
+    {
+        return this.accountService.getContacts(arg);
     }
 }
 

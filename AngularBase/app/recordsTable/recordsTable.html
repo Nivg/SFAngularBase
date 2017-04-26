@@ -1,0 +1,17 @@
+<h2>{{$ctrl.title}}</h2>
+
+<!--table-->
+<table class="table table-striped">
+    <thead>
+        <tr class="info">
+            <th>#</th>
+            <th ng-repeat="(key, values) in $ctrl.data[0]">{{key}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="(key, values) in $ctrl.data">
+            <td>{{$index + 1}}</td>
+            <td ng-repeat="val in values">{{val}}</td>
+        </tr>
+    </tbody>
+</table>

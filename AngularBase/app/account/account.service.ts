@@ -17,4 +17,9 @@ export class AccountService
     {
         return this.sfUtilsServiceSelector.sfRemote(SFUtilsService.FUNCTIONS_NAME_MAP.saveAccount, arg);
     }
+
+    getContacts(arg)
+    {
+        return this.sfUtilsServiceSelector.sfRemote(SFUtilsService.FUNCTIONS_NAME_MAP.getContacts, arg);
+    }
 }
