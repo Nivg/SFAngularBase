@@ -1,6 +1,12 @@
 <apex:component id="AngularTemplates">
+    <script type="text/ng-template" id="customSpinner.html">
+        <c:Spinner/>
+    </script>
     <script type="text/ng-template" id="app.html">
         <c:AccountApp/>
+    </script>
+    <script type="text/ng-template" id="recordsTable.html">
+        <c:RecordsTable/>
     </script>
     <script type="text/ng-template" id="account.html">
         <c:AccountLayout/>

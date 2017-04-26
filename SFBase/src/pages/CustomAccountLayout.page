@@ -12,6 +12,7 @@
         <title>SalesforceDemo</title>
         <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/node_modules/bootstrap/dist/css/bootstrap.min.css')}" type='text/css'/>
         <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/app/account/account.css')}" type='text/css'/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/app/spinner/customSpinner.css')}" type='text/css'/>
         <link rel="stylesheet" href="{!URLFOR($Resource.AngularBase, '/node_modules/@cgross/angular-busy/dist/angular-busy.min.css')}" type='text/css'/>
     </head>
     <body>

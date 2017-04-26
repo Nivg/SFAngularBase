@@ -1,7 +1,7 @@
 <apex:component id="AccountEdit">
     <div ng-show="$ctrl.isActive">
         <div class="container">
-            <form ng-if="$ctrl.accountCtrl.editAccountModel" name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
+            <form name="accountForm" novalidate="true" ng-submit="$ctrl.accountCtrl.saveAccount(accountForm.$valid)">
                 <div class="row">
                     <h2>Simple 2-column Form Edit</h2>
                 </div>
