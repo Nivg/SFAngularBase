@@ -93,10 +93,6 @@ var SFUtilsSelectorService = (function () {
     };
     return SFUtilsSelectorService;
 }());
-SFUtilsSelectorService.FUNCTIONS_NAME_MAP = {
-    'getAccount': 'CustomAccountLayout_CTRL.getAccount',
-    'saveAccount': 'CustomAccountLayout_CTRL.saveAccount'
-};
 exports.SFUtilsSelectorService = SFUtilsSelectorService;
 
 
@@ -117,7 +113,8 @@ var SFUtilsService = (function () {
 }());
 SFUtilsService.FUNCTIONS_NAME_MAP = {
     'getAccount': 'CustomAccountLayout_CTRL.getAccount',
-    'saveAccount': 'CustomAccountLayout_CTRL.saveAccount'
+    'saveAccount': 'CustomAccountLayout_CTRL.saveAccount',
+    'getContacts': 'CustomAccountLayout_CTRL.getContacts'
 };
 exports.SFUtilsService = SFUtilsService;
 
@@ -132,13 +129,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var app_component_1 = __webpack_require__(8);
 var account_module_1 = __webpack_require__(4);
 var sfUtilsSelector_service_1 = __webpack_require__(0);
-var sfUtilsServer_server_1 = __webpack_require__(11);
-var sfUtilsMock_service_1 = __webpack_require__(10);
+var sfUtilsServer_server_1 = __webpack_require__(13);
+var sfUtilsMock_service_1 = __webpack_require__(12);
+var recordsTable_module_1 = __webpack_require__(11);
 exports.appModule = angular
-    .module('app.module', [
+    .module('appModule', [
     'cgBusy',
-    account_module_1.AccountModule.name
+    account_module_1.accountModule.name,
+    recordsTable_module_1.recordsTableModule.name
 ])
+    .value('cgBusyDefaults', {
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/spinner/customSpinner.html')
+})
     .component('myApp', app_component_1.appComponent)
     .service('sfUtilsServiceSelector', sfUtilsSelector_service_1.SFUtilsSelectorService)
     .service('sfServer', sfUtilsServer_server_1.SFUtilsServer)
@@ -169,18 +171,22 @@ var AccountComponent = (function () {
     }
     AccountComponent.prototype.loadViewAccount = function () {
         var _this = this;
-        this.$scope.viewPromise = this.getAccount(this.$location.search())
+        this.editAccountModel = null;
+        this.$scope.viewAccountPromise = this.getAccount(this.$location.search())
             .then(function (account) {
             _this.viewAccountModel = account;
-            _this.editAccountModel = null;
+        });
+        this.$scope.contactsPromise = this.getContacts(this.$location.search())
+            .then(function (account) {
+            _this.contacts = account.Contacts;
         });
     };
     AccountComponent.prototype.loadEditAccount = function () {
         var _this = this;
-        this.$scope.editPromise = this.getAccount(this.$location.search())
+        this.viewAccountModel = null;
+        this.$scope.editAccountPromise = this.getAccount(this.$location.search())
             .then(function (account) {
             _this.editAccountModel = account;
-            _this.viewAccountModel = null;
         });
     };
     AccountComponent.prototype.getAccount = function (arg) {
@@ -205,7 +211,7 @@ var AccountComponent = (function () {
     AccountComponent.prototype.saveAccount = function (isValid) {
         var _this = this;
         if (isValid) {
-            this.$scope.editPromise = this.accountService.saveAccount(this.editAccountModel).then(function (result) {
+            this.$scope.editAccountPromise = this.accountService.saveAccount(this.editAccountModel).then(function (result) {
                 if (result.Status === 'Success') {
                     _this.accountEdit.isActive = false;
                     _this.accountView.isActive = true;
@@ -217,6 +223,9 @@ var AccountComponent = (function () {
                 }
             });
         }
+    };
+    AccountComponent.prototype.getContacts = function (arg) {
+        return this.accountService.getContacts(arg);
     };
     return AccountComponent;
 }());
@@ -238,8 +247,8 @@ var account_component_1 = __webpack_require__(3);
 var account_service_1 = __webpack_require__(5);
 var accountView_component_1 = __webpack_require__(7);
 var accountEdit_component_1 = __webpack_require__(6);
-exports.AccountModule = angular
-    .module('AccountModule', [])
+exports.accountModule = angular
+    .module('accountModule', [])
     .component('account', account_component_1.accountComponent)
     .component('accountView', accountView_component_1.accountViewComponent)
     .component('accountEdit', accountEdit_component_1.accountEditComponent)
@@ -263,6 +272,9 @@ var AccountService = (function () {
     };
     AccountService.prototype.saveAccount = function (arg) {
         return this.sfUtilsServiceSelector.sfRemote(sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.saveAccount, arg);
+    };
+    AccountService.prototype.getContacts = function (arg) {
+        return this.sfUtilsServiceSelector.sfRemote(sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.getContacts, arg);
     };
     return AccountService;
 }());
@@ -364,6 +376,50 @@ angular.bootstrap(document, [
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var sfUtilsSelector_service_1 = __webpack_require__(0);
+var RecordsTableComponent = (function () {
+    function RecordsTableComponent() {
+        //Sample data:
+        //this.data = [{Name: 'test1', Title: 'test2', Company: 'test6'}, {Name: 'test3', Title: 'test4', Company: 'test7'}];
+    }
+    RecordsTableComponent.prototype.$onInit = function () {
+        //debugger;
+        //bindings variable are available in this stage:
+    };
+    return RecordsTableComponent;
+}());
+exports.recordsTableComponent = {
+    controller: RecordsTableComponent,
+    bindings: {
+        title: '@',
+        headers: '<',
+        fields: '<',
+        data: '<'
+    },
+    templateUrl: sfUtilsSelector_service_1.SFUtilsSelectorService.buildTemplateURL('app/recordsTable/recordsTable.html')
+};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var recordsTable_component_1 = __webpack_require__(10);
+exports.recordsTableModule = angular
+    .module('recordsTableModule', [])
+    .component('recordsTable', recordsTable_component_1.recordsTableComponent);
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -398,13 +454,22 @@ var SFUtilsMock = (function (_super) {
                     answer = this.$timeout(function () {
                         var saveAccountAns;
                         if (arg) {
-                            saveAccountAns = { 'Status': 'Success', 'Message': '' };
+                            saveAccountAns = { Status: 'Success', Message: '' };
                         }
                         else {
-                            saveAccountAns = { 'Status': 'Error', 'Message': 'Save Account Error' };
+                            saveAccountAns = { Status: 'Error', Message: 'Save Account Error' };
                         }
                         return saveAccountAns;
                     }, 3000);
+                    break;
+                }
+            case sfUtils_service_1.SFUtilsService.FUNCTIONS_NAME_MAP.getContacts:
+                {
+                    answer = this.$timeout(function () {
+                        return { Contacts: [{ Email: 'jrogers@burlington.com', Id: 'c123456788', Name: 'Jack Rogers', Title: 'VP, Facilities' },
+                                { Email: 'jrogers1@burlington.com', Id: 'c123456785', Name: 'Jack1 Rogers1', Title: 'VP1, Facilities1' }],
+                            Id: 'a12345678', Status: 'Success' };
+                    }, 4000);
                     break;
                 }
             default:
@@ -422,7 +487,7 @@ exports.SFUtilsMock = SFUtilsMock;
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
