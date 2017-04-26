@@ -1,7 +1,7 @@
 <apex:component id="AccountView">
     <div ng-show="$ctrl.isActive">
         <div class="container">
-            <form ng-if="$ctrl.accountCtrl.viewAccountModel">
+            <form>
                 <div class="row">
                     <h2>Simple 2-column Form View</h2>
                 </div>
@@ -41,6 +41,11 @@
                 <div class="row">
                     <div class="form-group row pull-right" role="group">
                         <button type="button" class="btn btn-primary" ng-click="$ctrl.accountCtrl.editAccount()">Edit</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div cg-busy="$ctrl.accountCtrl.$scope.contactsPromise">
+                        <records-table data="$ctrl.accountCtrl.contacts" title="Contacts" headers="['test1', 'test2']"></records-table>
                     </div>
                 </div>
             </form>

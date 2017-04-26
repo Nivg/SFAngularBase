@@ -60,6 +60,39 @@ public with sharing class CustomAccountLayout_CTRL
         return result;
     }
 
+    @RemoteAction
+    public static Object getContacts (Map<String, Object> arg)
+    {
+        Object result = new Map<String, Object>();
+        try
+        {
+            Id accountId = (Id)arg.get('Id');
+            List<Contact> contactList = [SELECT Id, AccountId, Name, Title, Email FROM Contact WHERE AccountId = :accountId];
+            if(!contactList.isEmpty())
+            {
+                AccountModel am = new AccountModel();
+                am.Status = ResultStatus.Success.Name();
+                am.Id = contactList[0].AccountId;
+                am.Contacts = new List<ContactModel>();
+                for(Contact con : contactList)
+                {
+                    ContactModel cm = new ContactModel();
+                    cm.Id = con.Id;
+                    cm.Name = con.Name;
+                    cm.Title = con.Title;
+                    cm.Email = con.Email;
+                    am.Contacts.add(cm);
+                }
+                result = am;
+            }
+        }
+        catch (Exception e)
+        {
+            result = generateErrorResult(e);
+        }
+        return result;
+    }
+
     private static Object generateErrorResult(Exception e)
     {
         AccountModel am = new AccountModel();
@@ -70,6 +103,7 @@ public with sharing class CustomAccountLayout_CTRL
 
     class AccountModel
     {
+        public List<ContactModel> Contacts;
         public String Id;
         public String Name;
         public String Phone;
@@ -78,5 +112,13 @@ public with sharing class CustomAccountLayout_CTRL
 
         public String Status;
         public String Message;
+    }
+
+    class ContactModel
+    {
+        public String Id;
+        public String Name;
+        public String Title;
+        public String Email;
     }
 }
